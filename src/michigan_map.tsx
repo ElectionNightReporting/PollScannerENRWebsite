@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip } from 'react-tooltip';
 
 const PARTIES = [
   "Democratic Party",
@@ -30,7 +31,6 @@ export default function MichiganMap() {
   const [hoveredCounty, setHoveredCounty] = useState(null);
   const [selectedCounty, setSelectedCounty] = useState(null);
   const [features, setFeatures] = useState([]);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [pollData, setPollData] = useState({});
   const [selectedTownship, setSelectedTownship] = useState(null);
   const [countyWinners, setCountyWinners] = useState({});
@@ -134,13 +134,6 @@ export default function MichiganMap() {
     });
   };
 
-  const handleMouseMove = (event) => {
-    setCursorPosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
-  };
-
   const findPollData = (countyName) => {
     const countyData = pollData[countyName];
     if (!countyData) return null;
@@ -170,16 +163,17 @@ export default function MichiganMap() {
           viewBox="0 0 1000 800"
           className="w-full border border-gray-200 p-8 rounded-lg shadow-md"
           style={{ backgroundColor: "#f8fafc" }}
-          onMouseMove={handleMouseMove}
         >
           <g transform="translate(200, 750) scale(1, -1.1)">
             {features.map((feature) => {
               const countyName = feature.properties.name;
               const winningParty = countyWinners[countyName];
-              const fillColor = PARTY_COLORS[winningParty] || "#E5E7EB"; // Default to gray if no matching party color
+              const fillColor = PARTY_COLORS[winningParty] || "#E5E7EB";
               return (
                 <path
                   key={countyName}
+                  data-tooltip-id="county-tooltip"
+                  data-tooltip-content={countyName}
                   d={buildPath(feature.geometry.coordinates)}
                   className={`transition-colors duration-200 ${
                     selectedCounty === countyName ? "brightness-75" : ""
@@ -193,18 +187,7 @@ export default function MichiganMap() {
             })}
           </g>
         </svg>
-
-        {hoveredCounty && (
-          <div
-            className="fixed bg-white shadow-lg rounded-lg p-2 font-medium pointer-events-none select-none"
-            style={{
-              left: `${cursorPosition.x - 100}px`,
-              top: `${cursorPosition.y - 100}px`,
-            }}
-          >
-            {hoveredCounty}
-          </div>
-        )}
+        <Tooltip id="county-tooltip" />
       </div>
 
       <div className="w-1/2 ml-[50%] pl-8">
