@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip } from 'react-tooltip';
+import { Tooltip } from "react-tooltip";
 
 const PARTIES = [
   "Democratic Party",
@@ -177,7 +177,7 @@ export default function MichiganMap() {
                   d={buildPath(feature.geometry.coordinates)}
                   className={`transition-colors duration-200 ${
                     selectedCounty === countyName ? "brightness-75" : ""
-                  } stroke-gray-700 hover:brightness-75`}
+                  } stroke-gray-700 hover:brightness-75 outline-none`}
                   style={{ fill: fillColor }}
                   onMouseEnter={() => setHoveredCounty(countyName)}
                   onMouseLeave={() => setHoveredCounty(null)}
