@@ -75,15 +75,13 @@ export default function MichiganMap() {
   useEffect(() => {
     const fetchWinners = async () => {
       try {
-        const response = await fetch(
-          "/api/all-counties/presidential-winners"
-        );
+        const response = await fetch("/api/all-counties/presidential-winners");
         if (response.ok) {
           const winners = await response.json();
           setCountyWinners(winners);
         }
       } catch (error) {
-        console.error('Error fetching county winners:', error);
+        console.error("Error fetching county winners:", error);
       }
     };
 
@@ -146,13 +144,13 @@ export default function MichiganMap() {
   };
 
   return (
-    <div className="flex gap-8 w-full items-center">
+    <div className="flex gap-8 w-full items-center justify-center">
       <ToastContainer />
 
-      <div className="w-1/2 fixed top-1/2 -translate-y-1/2 left-10">
+      <div className="w-1/2 fixed top-1/2 -translate-y-1/2 mr-[45%]">
         <svg
           viewBox="0 0 1000 800"
-          className="w-full border border-gray-200 p-8 rounded-lg shadow-md"
+          className="w-full border border-gray-200 p-8 rounded-lg shadow-md max-w-7xl"
           style={{ backgroundColor: "#f8fafc" }}
         >
           <g transform="translate(200, 750) scale(1, -1.1)">
@@ -181,8 +179,8 @@ export default function MichiganMap() {
         <Tooltip id="county-tooltip" />
       </div>
 
-      <div className="w-1/2 ml-[50%] pl-8">
-        <Card>
+      <div className="w-1/2 ml-[50%] pl-4 ">
+        <Card className="max-w-3xl mx-auto">
           {!selectedCounty ? (
             <CardContent className="pt-6">
               <div className="text-gray-500 text-lg text-center">
@@ -191,11 +189,11 @@ export default function MichiganMap() {
             </CardContent>
           ) : (
             <>
-              <CardContent>
+              <CardContent className="pt-6">
                 {findPollData(selectedCounty) ? (
                   <div className="space-y-4">
-                    <div className="p-4 bg-white rounded-lg shadow sticky top-2">
-                      <h2 className="text-xl font-bold mb-1">
+                    <div className="p-6 bg-white rounded-lg shadow sticky top-2 max-w-3xl mx-auto">
+                      <h2 className="text-xl font-bold mb-3">
                         {selectedCounty} County
                       </h2>
                       <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -224,13 +222,15 @@ export default function MichiganMap() {
                     </div>
 
                     {selectedTownship && (
-                      <PollTicket
-                        data={{
-                          county: selectedCounty,
-                          township: selectedTownship,
-                          ...pollData[selectedCounty][selectedTownship],
-                        }}
-                      />
+                      <div className="max-w-3xl mx-auto">
+                        <PollTicket
+                          data={{
+                            county: selectedCounty,
+                            township: selectedTownship,
+                            ...pollData[selectedCounty][selectedTownship],
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
                 ) : (
