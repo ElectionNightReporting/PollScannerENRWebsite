@@ -74,26 +74,17 @@ export default function MichiganMap() {
 
   useEffect(() => {
     const fetchWinners = async () => {
-      const winners = {};
-      for (const feature of features) {
-        const countyName = feature.properties.name;
-        // ONLY HERE FOR TESTING PURPOSES
-        // FIX: Genesee and Oakland are the only counties that have presidential winner data
-        if (countyName === "Genesee" || countyName === "Oakland") {
-          try {
-            const response = await fetch(
-              `/api/county/${countyName}/presidential-winner`
-            );
-            if (response.ok) {
-              const data = await response.json();
-              winners[countyName] = data.winning_party;
-            }
-          } catch (error) {
-            console.error(`Error fetching winner for ${countyName}:`, error);
-          }
+      try {
+        const response = await fetch(
+          "/api/all-counties/presidential-winners"
+        );
+        if (response.ok) {
+          const winners = await response.json();
+          setCountyWinners(winners);
         }
+      } catch (error) {
+        console.error('Error fetching county winners:', error);
       }
-      setCountyWinners(winners);
     };
 
     if (features.length > 0) {
